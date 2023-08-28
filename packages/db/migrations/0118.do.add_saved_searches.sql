@@ -5,15 +5,13 @@
 BEGIN;
 
 
-
 CREATE TABLE IF NOT EXISTS omnivore.saved_searches (
-                                          id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-                                          user_id uuid NOT NULL REFERENCES omnivore.user ON DELETE CASCADE,
-                                          name text NOT NULL,
-                                          query text NOT NULL,
-                                          position integer NOT NULL,
-                                          created_at timestamptz NOT NULL DEFAULT current_timestamp,
-
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+    user_id uuid NOT NULL REFERENCES omnivore.user ON DELETE CASCADE,
+    name text NOT NULL,
+    query text NOT NULL,
+    position integer NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT current_timestamp,
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS saved_searches_user_id_name_idx ON omnivore.saved_searches (user_id, name);

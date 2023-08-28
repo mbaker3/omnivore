@@ -1,26 +1,31 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm'
-import { Link } from './link'
-import { Label } from './label'
+import { User } from './user'
 
-@Entity({ name: 'link_labels' })
-export class LinkLabel {
+@Entity({ name: 'saved_search' })
+export class SavedSearch {
   @PrimaryGeneratedColumn('uuid')
   id!: string
 
-  @ManyToOne(() => Link)
-  @JoinColumn({ name: 'link_id' })
-  link!: Link
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  user!: User
 
-  @ManyToOne(() => Label)
-  @JoinColumn({ name: 'label_id' })
-  label!: Label
+  @Column('text')
+  name!: string
+
+  @Column('text')
+  query!: string
 
   @CreateDateColumn()
-  createdAt!: Date
+  createdAt?: Date
+
+  @Column('integer')
+  position!: number
 }

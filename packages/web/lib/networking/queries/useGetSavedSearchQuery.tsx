@@ -1,6 +1,7 @@
 import { gql } from 'graphql-request'
 import useSWR from 'swr'
 import { publicGqlFetcher } from '../networkHelpers'
+import { SavedSearch, savedSearchFragment } from "../fragments/savedSearchFragment"
 
 type SavedSearchResponse = {
   savedSearch?: SavedSearch[]
@@ -12,33 +13,29 @@ type SavedSearchResponseData = {
   savedSearch: SavedSearch[]
 }
 
-export type SavedSearch = {
-  name: string
-  query: string
-  location: number
-}
-
 export function useGetSavedSearchQuery(): SavedSearchResponse {
   const query = gql`
-    query SavedLinks {
-      savedSearches {
+    query SavedSearches {
+      savedSearches { 
         ... on SavedSearchesSuccess { 
           savedSearch { 
-            name,
-            query, 
-            location
+            ...SavedSearchFields
           }
+        }
+        ... on SavedSearchesError {
+          errorCodes
         }
       }
     }
+    ${savedSearchFragment}
   `
-
+  //
   const { data, error } = useSWR(query, publicGqlFetcher);
-  const { savedSearch } = data as SavedSearchResponseData
+  const { savedSearch } = (data ?? {}) as SavedSearchResponseData
 
   return {
-    savedSearch: [],
-    savedSearchErrors: error, // TODO: figure out error possibilities
-    isLoading: !error && !data,
+    savedSearch: savedSearch ?? [],
+    savedSearchErrors: error ?? {},
+    isLoading: false,
   }
 }
