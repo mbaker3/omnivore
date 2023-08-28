@@ -368,6 +368,7 @@ export enum CreateHighlightErrorCode {
 export type CreateHighlightInput = {
   annotation?: InputMaybe<Scalars['String']>;
   articleId: Scalars['ID'];
+  color?: InputMaybe<Scalars['String']>;
   highlightPositionAnchorIndex?: InputMaybe<Scalars['Int']>;
   highlightPositionPercent?: InputMaybe<Scalars['Float']>;
   html?: InputMaybe<Scalars['String']>;
@@ -942,6 +943,7 @@ export type GroupsSuccess = {
 export type Highlight = {
   __typename?: 'Highlight';
   annotation?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']>;
   createdAt: Scalars['Date'];
   createdByMe: Scalars['Boolean'];
   highlightPositionAnchorIndex?: Maybe<Scalars['Int']>;
@@ -1194,6 +1196,7 @@ export enum MergeHighlightErrorCode {
 export type MergeHighlightInput = {
   annotation?: InputMaybe<Scalars['String']>;
   articleId: Scalars['ID'];
+  color?: InputMaybe<Scalars['String']>;
   highlightPositionAnchorIndex?: InputMaybe<Scalars['Int']>;
   highlightPositionPercent?: InputMaybe<Scalars['Float']>;
   html?: InputMaybe<Scalars['String']>;
@@ -2332,6 +2335,8 @@ export type SaveUrlInput = {
   clientRequestId: Scalars['ID'];
   labels?: InputMaybe<Array<CreateLabelInput>>;
   locale?: InputMaybe<Scalars['String']>;
+  publishedAt?: InputMaybe<Scalars['Date']>;
+  savedAt?: InputMaybe<Scalars['Date']>;
   source: Scalars['String'];
   state?: InputMaybe<ArticleSavingRequestStatus>;
   timezone?: InputMaybe<Scalars['String']>;
@@ -2378,6 +2383,7 @@ export type SearchItem = {
   annotation?: Maybe<Scalars['String']>;
   archivedAt?: Maybe<Scalars['Date']>;
   author?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']>;
   content?: Maybe<Scalars['String']>;
   contentReader: ContentReader;
   createdAt: Scalars['Date'];
@@ -2917,6 +2923,7 @@ export enum UpdateHighlightErrorCode {
 
 export type UpdateHighlightInput = {
   annotation?: InputMaybe<Scalars['String']>;
+  color?: InputMaybe<Scalars['String']>;
   highlightId: Scalars['ID'];
   html?: InputMaybe<Scalars['String']>;
   quote?: InputMaybe<Scalars['String']>;
@@ -5051,6 +5058,7 @@ export type GroupsSuccessResolvers<ContextType = ResolverContext, ParentType ext
 
 export type HighlightResolvers<ContextType = ResolverContext, ParentType extends ResolversParentTypes['Highlight'] = ResolversParentTypes['Highlight']> = {
   annotation?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  color?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   createdByMe?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   highlightPositionAnchorIndex?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -5745,6 +5753,7 @@ export type SearchItemResolvers<ContextType = ResolverContext, ParentType extend
   annotation?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   archivedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   author?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  color?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   contentReader?: Resolver<ResolversTypes['ContentReader'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;

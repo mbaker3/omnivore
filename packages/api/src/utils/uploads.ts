@@ -108,7 +108,7 @@ export const getStorageFileDetails = async (
   const file = storage.bucket(bucketName).file(filePathName)
   const [metadata] = await file.getMetadata()
   // GCS returns MD5 Hash in base64 encoding, we convert it here to hex string
-  const md5Hash = Buffer.from(metadata.md5Hash, 'base64').toString('hex')
+  const md5Hash = Buffer.from(metadata.md5Hash || '', 'base64').toString('hex')
 
   return { md5Hash, fileUrl: file.publicUrl() }
 }
@@ -129,7 +129,7 @@ export const uploadToBucket = async (
   await storage
     .bucket(selectedBucket || bucketName)
     .file(filePath)
-    .save(data, options)
+    .save(data, { ...options, timeout: 30000 })
 }
 
 export const createGCSFile = (filename: string): File => {

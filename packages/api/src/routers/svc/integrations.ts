@@ -40,26 +40,25 @@ export function integrationsServiceRouter() {
       action: req.params.action,
       integrationName: req.params.integrationName,
     })
-    const { message: msgStr, expired } = readPushSubscription(req)
-
-    if (!msgStr) {
-      res.status(400).send('Bad Request')
-      return
-    }
-
-    if (expired) {
-      logger.info('discarding expired message')
-      res.status(200).send('Expired')
-      return
-    }
 
     try {
+      const { message: msgStr, expired } = readPushSubscription(req)
+
+      if (!msgStr) {
+        return res.status(200).send('Bad Request')
+      }
+
+      if (expired) {
+        logger.info('discarding expired message')
+        return res.status(200).send('Expired')
+      }
+
       const data: Message = JSON.parse(msgStr)
       const userId = data.userId
       const type = data.type
       if (!userId) {
         logger.info('No userId found in message')
-        res.status(400).send('Bad Request')
+        res.status(200).send('Bad Request')
         return
       }
 
@@ -93,7 +92,7 @@ export function integrationsServiceRouter() {
         }
         if (!id) {
           logger.info('No id found in message')
-          res.status(400).send('Bad Request')
+          res.status(200).send('Bad Request')
           return
         }
         const page = await getPageById(id)
@@ -118,8 +117,7 @@ export function integrationsServiceRouter() {
             integrationId: integration.id,
             pageId: page.id,
           })
-          res.status(400).send('Failed to sync')
-          return
+          return res.status(400).send('Failed to sync')
         }
       } else if (action === 'SYNC_ALL') {
         // sync all pages of the user
@@ -145,12 +143,11 @@ export function integrationsServiceRouter() {
 
           const synced = await integrationService.export(integration, pages)
           if (!synced) {
-            logger.info('failed to sync pages', {
+            logger.error('failed to sync pages', {
               pageIds,
               integrationId: integration.id,
             })
-            res.status(400).send('Failed to sync')
-            return
+            return res.status(400).send('Failed to sync')
           }
         }
         // delete task name if completed
@@ -162,13 +159,14 @@ export function integrationsServiceRouter() {
         res.status(200).send('Unknown action')
         return
       }
-
-      res.status(200).send('OK')
     } catch (err) {
       logger.error('sync with integrations failed', err)
-      res.status(500).send(err)
+      return res.status(500).send(err)
     }
+
+    res.status(200).send('OK')
   })
+
   // import pages from integration task handler
   router.post('/import', async (req, res) => {
     logger.info('start cloud task to import pages from integration')
@@ -236,7 +234,7 @@ export function integrationsServiceRouter() {
         })
         // stringify the data and pipe it to the write_stream
         const stringifier = stringify({
-          header: false,
+          header: true,
           columns: ['url', 'state', 'labels'],
         })
         stringifier.pipe(writeStream)

@@ -13,30 +13,31 @@ export function webhooksServiceRouter() {
 
   router.post('/trigger/:action', async (req, res) => {
     logger.info('trigger webhook of action', req.params.action)
-    const { message: msgStr, expired } = readPushSubscription(req)
-
-    if (!msgStr) {
-      res.status(400).send('Bad Request')
-      return
-    }
-
-    if (expired) {
-      logger.info('discarding expired message')
-      res.status(200).send('Expired')
-      return
-    }
 
     try {
+      const { message: msgStr, expired } = readPushSubscription(req)
+
+      if (!msgStr) {
+        res.status(200).send('Bad Request')
+        return
+      }
+
+      if (expired) {
+        logger.info('discarding expired message')
+        res.status(200).send('Expired')
+        return
+      }
+
       const data = JSON.parse(msgStr)
-      const { userId, type } = data
+      const { userId, type } = data as { userId: string; type: string }
       if (!userId || !type) {
         logger.info('No userId or type found in message')
-        res.status(400).send('Bad Request')
+        res.status(200).send('Bad Request')
         return
       }
 
       // example: PAGE_CREATED
-      const eventType = `${type as string}_${req.params.action}`.toUpperCase()
+      const eventType = `${type}_${req.params.action}`.toUpperCase()
       const webhooks = await getRepository(Webhook)
         .createQueryBuilder()
         .where('user_id = :userId', { userId })
@@ -46,49 +47,56 @@ export function webhooksServiceRouter() {
 
       if (webhooks.length <= 0) {
         logger.info(
-          'No active webhook found for user',
-          userId,
-          'and eventType',
-          eventType
+          'No active webhook found for user ' +
+            userId +
+            ' and eventType ' +
+            eventType
         )
         res.status(200).send('No webhook found')
         return
       }
 
       // trigger webhooks
-      for (const webhook of webhooks) {
-        const url = webhook.url
-        const method = webhook.method as Method
-        const body = JSON.stringify({
-          action: req.params.action,
-          userId,
-          [type]: data,
-        })
-
-        logger.info('triggering webhook', url)
-        try {
-          await axios.request({
-            url,
-            method,
-            headers: {
-              'Content-Type': webhook.contentType,
-            },
-            data: body,
-          })
-        } catch (error) {
-          if (axios.isAxiosError(error)) {
-            logger.error(error.response)
-          } else {
-            logger.error(error)
+      await Promise.all(
+        webhooks.map((webhook) => {
+          const url = webhook.url
+          const method = webhook.method as Method
+          const body = {
+            action: req.params.action,
+            userId,
+            [type]: data,
           }
-        }
-      }
 
-      res.status(200).send('OK')
+          logger.info('triggering webhook', { url, method })
+
+          return axios
+            .request({
+              url,
+              method,
+              headers: {
+                'Content-Type': webhook.contentType,
+              },
+              data: body,
+              timeout: 10000, // 10s
+            })
+            .then((response) => {
+              logger.info('webhook triggered', response.data)
+            })
+            .catch((error) => {
+              if (axios.isAxiosError(error)) {
+                logger.info('webhook failed', error.response)
+              } else {
+                logger.info('webhook failed', error)
+              }
+            })
+        })
+      )
     } catch (err) {
-      logger.info('trigger webhook failed', err)
-      res.status(500).send(err)
+      logger.error('trigger webhook failed', err)
+      return res.status(500).send(err)
     }
+
+    res.send('OK')
   })
 
   return router
