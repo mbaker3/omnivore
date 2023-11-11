@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { htmlToSpeechFile } from '@omnivore/text-to-speech-handler'
+// import { htmlToSpeechFile } from '@omnivore/text-to-speech-handler'
 import cors from 'cors'
 import express from 'express'
 import * as jwt from 'jsonwebtoken'
@@ -103,16 +103,16 @@ export function articleRouter() {
           return res.status(404).send('Page not found')
         }
 
-        const speechFile = htmlToSpeechFile({
-          title: item.title,
-          content: item.readableContent,
-          options: {
-            primaryVoice: voice,
-            secondaryVoice: secondaryVoice,
-            language: language || item.itemLanguage || undefined,
-          },
-        })
-        return res.send({ ...speechFile, pageId: articleId })
+        // const speechFile = htmlToSpeechFile({
+        //   title: item.title,
+        //   content: item.readableContent,
+        //   options: {
+        //     primaryVoice: voice,
+        //     secondaryVoice: secondaryVoice,
+        //     language: language || item.itemLanguage || undefined,
+        //   },
+        // })
+        return res.send({ pageId: articleId })
       } catch (error) {
         logger.error('Error getting article speech:', error)
         res.status(500).send({ errorCode: 'INTERNAL_ERROR' })

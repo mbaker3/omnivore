@@ -14,6 +14,8 @@ type LabelsPickerProps = {
   selectedLabels: Label[]
   focused: boolean
 
+  recommendedLabels: Label[]
+
   inputValue: string
   setInputValue: (value: string) => void
   clearInputState: () => void
@@ -191,6 +193,33 @@ export const LabelsPicker = (props: LabelsPickerProps): JSX.Element => {
           />
         ))
       )}
+      {
+        props.recommendedLabels?.map((label, idx) => (
+          <EditLabelChip
+            key={label.id}
+            text={label.name}
+            color={label.color}
+            isRecommended={true}
+            isSelected={
+              props.highlightLastLabel && idx == props.selectedLabels.length - 1
+            }
+            addAction={() => props.selectOrCreateLabel(label.name)}
+            xAction={() => {
+              const idx = props.selectedLabels.findIndex(
+                (l) => l.id == label.id
+              )
+              if (idx !== -1) {
+                const _selectedLabels = props.selectedLabels
+                _selectedLabels.splice(idx, 1)
+                props.dispatchLabels({
+                  type: 'SAVE',
+                  labels: [..._selectedLabels],
+                })
+              }
+            }}
+          />
+        ))
+      }
       <SpanBox
         css={{
           display: 'inline-flex',

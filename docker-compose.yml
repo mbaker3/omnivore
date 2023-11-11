@@ -1,8 +1,11 @@
 version: '3'
 services:
   postgres:
-    image: "postgres:12.8"
+    image: "ankane/pgvector"
+    platform: "linux/amd64"
     container_name: "omnivore-postgres"
+    ports:
+      - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -39,6 +42,7 @@ services:
     container_name: "omnivore-api"
     ports:
       - "4000:8080"
+    platform: "linux/amd64"
     healthcheck:
       test: ["CMD-SHELL", "nc -z 0.0.0.0 8080 || exit 1"]
       interval: 15s
@@ -58,6 +62,7 @@ services:
       - CLIENT_URL=http://localhost:3000
       - GATEWAY_URL=http://localhost:8080/api
       - CONTENT_FETCH_URL=http://content-fetch:8080/?token=some_token
+      - REMINDER_TASK_HANDLER_URL=http://localhost:8090
     depends_on:
       migrate:
         condition: service_completed_successfully

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Label } from '../../../lib/networking/fragments/labelFragment'
 import { SpanBox, VStack } from '../../elements/LayoutPrimitives'
 import {
@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { randomLabelColorHex } from '../../../utils/settings-page/labels/labelColorObjects'
 import { LabelsDispatcher } from '../../../lib/hooks/useSetPageLabels'
 import * as Dialog from '@radix-ui/react-dialog'
+import { useRecommendPageLabels } from "../../../lib/hooks/useRecommendPageLabels"
 
 type SetLabelsModalProps = {
   provider: LabelsProvider
@@ -23,6 +24,9 @@ type SetLabelsModalProps = {
 
   selectedLabels: Label[]
   dispatchLabels: LabelsDispatcher
+
+  recommendLabels?: boolean
+  recommendationArticleId?: string
 }
 
 export function SetLabelsModal(props: SetLabelsModalProps): JSX.Element {
@@ -35,6 +39,7 @@ export function SetLabelsModal(props: SetLabelsModalProps): JSX.Element {
     useState<string | undefined>(undefined)
   const errorTimeoutRef = useRef<NodeJS.Timeout | undefined>()
   const [highlightLastLabel, setHighlightLastLabel] = useState(false)
+  const labelRecommendations = useRecommendPageLabels(props.recommendationArticleId!);
 
   const showMessage = useCallback(
     (msg: string, timeout?: number) => {
@@ -55,6 +60,10 @@ export function SetLabelsModal(props: SetLabelsModalProps): JSX.Element {
     },
     [errorTimeoutRef]
   )
+
+  const unusedLabelRecommendations = useMemo(() => {
+    return labelRecommendations.filter(({ id }) => !props.selectedLabels.some(it => it.id === id));
+  }, [labelRecommendations, props.selectedLabels, props.provider])
 
   useEffect(() => {
     const maxLengthMessage = 'Max label length: 48 chars'
@@ -197,6 +206,7 @@ export function SetLabelsModal(props: SetLabelsModalProps): JSX.Element {
               inputValue={inputValue}
               setInputValue={setInputValue}
               clearInputState={clearInputState}
+              labelRecommendations={unusedLabelRecommendations}
               selectedLabels={props.selectedLabels}
               dispatchLabels={props.dispatchLabels}
               tabCount={tabCount}

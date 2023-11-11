@@ -12,7 +12,7 @@ import {
 import {
   createSubscription,
   unsubscribe,
-  UNSUBSCRIBE_EMAIL_TEXT
+  UNSUBSCRIBE_EMAIL_TEXT,
 } from '../../src/services/subscriptions'
 import { getRepository } from '../../src/repository'
 import { createNewsletterEmail } from '../../src/services/newsletters'
@@ -331,7 +331,9 @@ describe('Subscriptions API', () => {
       const updatedSubscription = await getRepository(Subscription).findOneBy({
         id: subscription.id,
       })
-      expect(updatedSubscription?.status).to.eql(SubscriptionStatus.Unsubscribed)
+      expect(updatedSubscription?.status).to.eql(
+        SubscriptionStatus.Unsubscribed
+      )
 
       // check if the email was sent
       expect(fake).to.have.been.calledOnceWith({

@@ -120,6 +120,7 @@ import {
   validateUsernameResolver,
   webhookResolver,
   webhooksResolver,
+  recommendLabelsResolver,
 } from './index'
 import { markEmailAsItemResolver, recentEmailsResolver } from './recent_emails'
 import { recentSearchesResolver } from './recent_searches'
@@ -220,6 +221,7 @@ export const functionResolvers = {
     user: getUserResolver,
     users: getAllUsersResolver,
     validateUsername: validateUsernameResolver,
+    recommendLabels: recommendLabelsResolver,
     article: getArticleResolver,
     // sharedArticle: getSharedArticleResolver,
     // feedArticles: getUserFeedArticlesResolver,

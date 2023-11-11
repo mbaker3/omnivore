@@ -26,6 +26,7 @@ export function SetPageLabelsModalPresenter(
     if (props.article) {
       props.article.labels = labels.labels
     }
+
     props.onOpenChange(true)
   }, [props, labels])
 
@@ -35,6 +36,8 @@ export function SetPageLabelsModalPresenter(
       selectedLabels={labels.labels}
       dispatchLabels={dispatchLabels}
       onOpenChange={onOpenChange}
+      recommendLabels={true}
+      recommendationArticleId={props.articleId}
     />
   )
 }

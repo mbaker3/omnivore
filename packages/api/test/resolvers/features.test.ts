@@ -5,7 +5,11 @@ import sinon, { SinonFakeTimers } from 'sinon'
 import { User } from '../../src/entity/user'
 import { env } from '../../src/env'
 import { userRepository } from '../../src/repository/user'
-import { createFeature, createFeatures, deleteFeature } from '../../src/services/features'
+import {
+  createFeature,
+  createFeatures,
+  deleteFeature,
+} from '../../src/services/features'
 import { deleteUser } from '../../src/services/user'
 import { createTestUser } from '../db'
 import { graphqlRequest, request } from '../util'

@@ -8,7 +8,9 @@ type EditLabelChipProps = {
   text: string
   color: string
   isSelected?: boolean
+  isRecommended?: boolean
   xAction: () => void
+  addAction?: () => void
 }
 
 export function EditLabelChip(props: EditLabelChipProps): JSX.Element {
@@ -36,6 +38,7 @@ export function EditLabelChip(props: EditLabelChipProps): JSX.Element {
         borderRadius: '5px',
         borderWidth: '1px',
         borderStyle: 'solid',
+        opacity: props.isRecommended ? "50%": "100%",
         color: isDark ? '#EBEBEB' : '#2A2A2A',
         borderColor: props.isSelected ? selectedBorder : unSelectedBorder,
         backgroundColor: isDark ? '#2A2A2A' : '#F9F9F9',
@@ -48,13 +51,14 @@ export function EditLabelChip(props: EditLabelChipProps): JSX.Element {
           style="ghost"
           css={{ display: 'flex', pt: '1px' }}
           onClick={(event) => {
-            props.xAction()
+            !props.isRecommended ? props.xAction() : props.addAction()
             event.preventDefault()
           }}
         >
           <X
             size={14}
             color={props.isSelected ? xSelectedColor : xUnselectedColor}
+            style={{ rotate: props.isRecommended ? "45deg" : "0deg"}}
           />
         </Button>
       </HStack>

@@ -1,10 +1,8 @@
-import { Button } from './Button'
 import { SpanBox, HStack } from './LayoutPrimitives'
 import { Circle, X } from 'phosphor-react'
 import { isDarkTheme } from '../../lib/themeUpdater'
 import { Label } from '../../lib/networking/fragments/labelFragment'
 import { useMemo } from 'react'
-import { theme } from '../tokens/stitches.config'
 
 type EditLabelChipStackProps = {
   labels: Label[]

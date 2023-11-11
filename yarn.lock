@@ -21815,6 +21815,11 @@ pgpass@1.x:
   dependencies:
     split2 "^3.1.1"
 
+pgvector@0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/pgvector/-/pgvector-0.1.5.tgz#13709152456364b5b3fcc661e38ca002aa3d97bb"
+  integrity sha512-T1SeomH5PkSpMHmnW8CVh6hwjkrjx/xkEMkW0MBFyxMkIEcu6pw5pQW8CNwsVXeJIE3zPdLCqYHqn1GwwT4lXw==
+
 phosphor-react@^1.4.0:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/phosphor-react/-/phosphor-react-1.4.1.tgz#97b0e034d9937db9b97fe53b186e9646464fd4e7"

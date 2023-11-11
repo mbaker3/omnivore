@@ -158,4 +158,3 @@ describe('query with author set', () => {
     expect(result.matchFilters[0].value).to.equal('omnivore blog')
   })
 })
-

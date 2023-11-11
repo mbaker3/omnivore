@@ -36,6 +36,8 @@ type SetLabelsControlProps = {
   deleteLastLabel: () => void
   selectOrCreateLabel: (value: string) => void
 
+  labelRecommendations: Label[]
+
   errorMessage?: string
 
   footer?: React.ReactNode
@@ -80,6 +82,8 @@ function Header(props: HeaderProps): JSX.Element {
           clearInputState={props.clearInputState}
           deleteLastLabel={props.deleteLastLabel}
           selectOrCreateLabel={props.selectOrCreateLabel}
+
+          recommendedLabels={props.labelRecommendations}
         />
       </Box>
     </VStack>
@@ -286,6 +290,7 @@ export function SetLabelsControl(props: SetLabelsControlProps): JSX.Element {
   const { inputValue, setInputValue, selectedLabels, setHighlightLastLabel } =
     props
   const { labels, revalidate } = useGetLabelsQuery()
+
   // Move focus through the labels list on tab or arrow up/down keys
   const [focusedIndex, setFocusedIndex] = useState<number | undefined>(0)
 
@@ -450,6 +455,7 @@ export function SetLabelsControl(props: SetLabelsControlProps): JSX.Element {
         inputValue={inputValue}
         setInputValue={setInputValue}
         selectedLabels={props.selectedLabels}
+        labelRecommendations={props.labelRecommendations}
         dispatchLabels={props.dispatchLabels}
         tabCount={props.tabCount}
         setTabCount={props.setTabCount}

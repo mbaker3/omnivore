@@ -135,9 +135,12 @@ describe('Integrations resolvers', () => {
             query(integrationId, integrationName, token),
             authToken
           )
-          const integration = await findIntegration({
-            id: res.body.data.setIntegration.integration.id,
-          }, loginUser.id)
+          const integration = await findIntegration(
+            {
+              id: res.body.data.setIntegration.integration.id,
+            },
+            loginUser.id
+          )
           expect(integration?.taskName).not.to.be.null
         })
       })
@@ -218,10 +221,14 @@ describe('Integrations resolvers', () => {
             })
 
             afterEach(async () => {
-              await updateIntegration(existingIntegration.id, {
-                taskName: 'some task name',
-                enabled: true,
-              }, loginUser.id)
+              await updateIntegration(
+                existingIntegration.id,
+                {
+                  taskName: 'some task name',
+                  enabled: true,
+                },
+                loginUser.id
+              )
             })
 
             it('disables integration', async () => {
@@ -238,9 +245,12 @@ describe('Integrations resolvers', () => {
                 query(integrationId, integrationName, token, enabled),
                 authToken
               )
-              const integration = await findIntegration({
-                id: res.body.data.setIntegration.integration.id,
-              }, loginUser.id)
+              const integration = await findIntegration(
+                {
+                  id: res.body.data.setIntegration.integration.id,
+                },
+                loginUser.id
+              )
               expect(integration?.taskName).to.be.null
             })
           })
@@ -251,10 +261,14 @@ describe('Integrations resolvers', () => {
             })
 
             afterEach(async () => {
-              await updateIntegration(existingIntegration.id, {
-                taskName: null,
-                enabled: false,
-              }, loginUser.id)
+              await updateIntegration(
+                existingIntegration.id,
+                {
+                  taskName: null,
+                  enabled: false,
+                },
+                loginUser.id
+              )
             })
 
             it('enables integration', async () => {
@@ -271,9 +285,12 @@ describe('Integrations resolvers', () => {
                 query(integrationId, integrationName, token, enabled),
                 authToken
               )
-              const integration = await findIntegration({
-                id: res.body.data.setIntegration.integration.id,
-              }, loginUser.id)
+              const integration = await findIntegration(
+                {
+                  id: res.body.data.setIntegration.integration.id,
+                },
+                loginUser.id
+              )
               expect(integration?.taskName).not.to.be.null
             })
           })
@@ -365,9 +382,12 @@ describe('Integrations resolvers', () => {
           query(existingIntegration.id),
           authToken
         )
-        const integration = await findIntegration({
-          id: existingIntegration.id,
-        }, loginUser.id)
+        const integration = await findIntegration(
+          {
+            id: existingIntegration.id,
+          },
+          loginUser.id
+        )
 
         expect(res.body.data.deleteIntegration.integration).to.be.an('object')
         expect(res.body.data.deleteIntegration.integration.id).to.eql(
@@ -415,9 +435,12 @@ describe('Integrations resolvers', () => {
           authToken
         ).expect(200)
         expect(res.body.data.importFromIntegration.success).to.be.true
-        const integration = await findIntegration({
-          id: existingIntegration.id,
-        }, loginUser.id)
+        const integration = await findIntegration(
+          {
+            id: existingIntegration.id,
+          },
+          loginUser.id
+        )
         expect(integration?.taskName).not.to.be.null
       })
     })

@@ -2590,6 +2590,22 @@ const schema = gql`
     email: String!
   }
 
+  union RecommendLabelsResult = RecommendLabelsSuccess | RecommendLabelsError
+
+  type RecommendLabelsSuccess {
+    labels: [Label]!
+  }
+
+  enum RecommendLabelsErrorCode {
+    BAD_REQUEST
+    UNAUTHORIZED
+    NOT_FOUND
+  }
+
+  type RecommendLabelsError {
+    errorCodes: [RecommendLabelsErrorCode!]!
+  }
+
   # Mutations
   type Mutation {
     googleLogin(input: GoogleLoginInput!): LoginResult!
@@ -2751,6 +2767,7 @@ const schema = gql`
     filters: FiltersResult!
     groups: GroupsResult!
     recentEmails: RecentEmailsResult!
+    recommendLabels(articleId: ID!): RecommendLabelsResult!
   }
 `
 

@@ -331,10 +331,7 @@ describe('Labels API', () => {
 
     after(async () => {
       // clean up
-      await deleteLabels(
-        { user: { id: user.id } },
-        user.id
-      )
+      await deleteLabels({ user: { id: user.id } }, user.id)
       await deleteLibraryItemById(item.id)
     })
 
@@ -458,7 +455,7 @@ describe('Labels API', () => {
       })
 
       after(async () => {
-        await deleteLabels( { id: toUpdateLabel.id }, user.id)
+        await deleteLabels({ id: toUpdateLabel.id }, user.id)
       })
 
       it('should return the updated label', async () => {
@@ -532,10 +529,7 @@ describe('Labels API', () => {
 
     after(async () => {
       // clean up
-      await deleteLabels(
-        { user: { id: user.id } },
-        user.id
-      )
+      await deleteLabels({ user: { id: user.id } }, user.id)
       await deleteLibraryItemById(item.id)
     })
 
