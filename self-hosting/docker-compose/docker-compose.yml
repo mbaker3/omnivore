@@ -67,9 +67,9 @@ services:
       dockerfile: ./packages/web/Dockerfile-self
       args:
         - APP_ENV=prod
-        - BASE_URL=http://omnivore.bakerfam.net:3000
-        - SERVER_BASE_URL=http://omnivore.bakerfam.net:4000
-        - HIGHLIGHTS_BASE_URL=http://omnivore.bakerfam.net:3000
+        - BASE_URL=https://omnivore.bakerfam.net
+        - SERVER_BASE_URL=https://omnivore.bakerfam.net
+        - HIGHLIGHTS_BASE_URL=https://omnivore.bakerfam.net
         - USE_NATIVE_PDF=true
     container_name: "omnivore-web"
     ports:
