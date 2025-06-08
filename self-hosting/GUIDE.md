@@ -58,6 +58,9 @@ Running `docker compose up` will pull the images from the github, and then start
 During the first deployment omnivore-migrate will go through and set up the necessary Postgres tables. 
 This will also create a demo user with email: demo@omnivore.app, password: demo_password. 
 
+If you don't want a demo user created add the following to your `.env` file.
+`NO_DEMO_USER=true`
+
 When the service is ready you can access the web-app by using localhost:3000
 
 With the default .env file you will be able to use Omnivore, add RSS Feeds, add stories etc. 
